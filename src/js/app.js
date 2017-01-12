@@ -1,6 +1,7 @@
 const App = App || {};
 
 App.init = function() {
+  $('#map-canvas').hide();
   this.apiUrl = 'http://localhost:3000/api';
   this.$main  = $('main');
   $('.register').on('click', this.register.bind(this));
@@ -20,6 +21,8 @@ App.loggedInState = function(){
   $('.loggedIn').show();
   $('.loggedOut').hide();
   this.usersIndex();
+  $('#map-canvas').show();
+  googleMap.mapSetup();
 };
 
 App.loggedOutState = function(){
@@ -137,5 +140,22 @@ App.removeToken = function(){
   return window.localStorage.clear();
 };
 
-
+// Map functions
 $(App.init.bind(App));
+
+const googleMap = googleMap || {};
+const google = google;
+
+googleMap.mapSetup = function() {
+  const canvas = document.getElementById('map-canvas');
+  console.log(canvas);
+  const mapOptions = {
+    zoom: 12,
+    center: new google.maps.LatLng(51.506178,-0.088369),
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+
+  this.map = new google.maps.Map(canvas, mapOptions);
+};
+
+$(googleMap.mapSetup.bind(googleMap));
