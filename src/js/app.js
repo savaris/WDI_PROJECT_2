@@ -150,7 +150,7 @@ googleMap.mapSetup = function() {
   const canvas = document.getElementById('map-canvas');
   console.log(canvas);
   const mapOptions = {
-    zoom: 12,
+    zoom: 14,
     center: new google.maps.LatLng(51.506178,-0.088369),
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
