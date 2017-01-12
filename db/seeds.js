@@ -1,4 +1,4 @@
-const rp = require('request-promise');
+// const rp = require('request-promise');
 
 // https://developers.webcams.travel/#webcams-api-webcam-timelapse-object
 // https://webcamstravel.p.mashape.com/webcams/list/limit=50,0?show=webcams:location,image,url
@@ -9,3 +9,22 @@ const rp = require('request-promise');
 // .end(function (result) {
 //   console.log(result.status, result.headers, result.body);
 // });
+
+const mongoose = require('mongoose');
+
+const databaseURL = process.env.MONGOLAB_URL || 'mongodb://localhost/wdi_project_2_web_cams';
+mongoose.connect(databaseURL);
+
+const WebCam = require('../models/webCam');
+
+const webCam1 = new WebCam({
+  name: 'Web Cam',
+  img: 'https://d1e4fni9ntsf6g.cloudfront.net/pages/buying-guides/logitech-webcam.jpg',
+  lat: 51.492574,
+  lng: -0.094584
+});
+
+webCam1.save((err, webCam) => {
+  if (err) return console.log(err);
+  return console.log(`${webCam.name} was saved`);
+});
