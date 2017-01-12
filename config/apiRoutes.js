@@ -7,3 +7,5 @@ router.route('/register')
   .post(authentications.register);
 router.route('login')
   .post(authentications.login);
+
+module.exports = router;
