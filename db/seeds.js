@@ -12,19 +12,33 @@
 
 const mongoose = require('mongoose');
 
-const databaseURL = process.env.MONGOLAB_URL || 'mongodb://localhost/wdi_project_2_web_cams';
+const databaseURL = process.env.MONGOLAB_URL || 'mongodb://localhost:27017/wdi_project_2_web_cams';
 mongoose.connect(databaseURL);
 
-const WebCam = require('../models/webCam');
+const Webcam = require('../models/webcam');
 
-const webCam1 = new WebCam({
+Webcam.collection.drop();
+
+const webcam1 = new Webcam({
   name: 'Web Cam',
   img: 'https://d1e4fni9ntsf6g.cloudfront.net/pages/buying-guides/logitech-webcam.jpg',
   lat: 51.492574,
   lng: -0.094584
 });
 
-webCam1.save((err, webCam) => {
+webcam1.save((err, webcam) => {
   if (err) return console.log(err);
-  return console.log(`${webCam.name} was saved`);
+  return console.log(`${webcam.name} was saved`);
+});
+
+const webcam2 = new Webcam({
+  name: 'Web Cam Two',
+  img: 'https://d1e4fni9ntsf6g.cloudfront.net/pages/buying-guides/logitech-webcam.jpg',
+  lat: 51.542863,
+  lng: -0.136260
+});
+
+webcam2.save((err, webcam) => {
+  if (err) return console.log(err);
+  return console.log(`${webcam.name} was saved`);
 });

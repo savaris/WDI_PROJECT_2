@@ -1,5 +1,6 @@
 // module.exports = {
-//   index: usersIndex,
+//   index: usersIndex
+// };
 //   show: usersShow,
 //   update: usersUpdate,
 //   delete: usersDelete

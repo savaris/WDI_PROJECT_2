@@ -146,16 +146,53 @@ $(App.init.bind(App));
 const googleMap = googleMap || {};
 const google = google;
 
-googleMap.mapSetup = function() {
+googleMap.addInfoWindowForWebcam = function(webcam, marker){
+  // Inbuilt defined Google click event
+  google.maps.event.addListener(marker, 'click',() => {
+    if (typeof this.infoWindow !== 'undefined')this.infoWindow.close();
+    this.infoWindow = new google.maps.InfoWindow({
+      content: `<div class ="info-marker">
+      <img src="${ webcam.img }"><p>${ webcam.name }</p></div>`
+    });
+    this.infoWindow.open(this.map, marker);
+    this.map.setCenter(marker.getPosition());
+    this.map.setZoom(10);
+
+  });
+};
+
+googleMap.createMarkerForWebcam = function(webcam){
+  const latlng = new google.maps.LatLng(webcam.lat, webcam.lng);
+  const marker = new google.maps.Marker({
+    position: latlng,
+    map: this.map,
+    animation: google.maps.Animation.DROP
+  });
+  this.addInfoWindowForWebcam(webcam, marker);
+
+};
+
+googleMap.loopThroughWebcams = function(data) {
+  $.each(data.webcams, (index, webcam) => {
+    setTimeout(() => {
+      googleMap.createMarkerForWebcam(webcam);
+    }, index * 600);
+  });
+};
+
+googleMap.getWebcams = function(){
+  $.get('http://localhost:3000/webcams').done(this.loopThroughWebcams);
+};
+
+googleMap.mapSetup = function(){
   const canvas = document.getElementById('map-canvas');
-  console.log(canvas);
   const mapOptions = {
-    zoom: 14,
+    zoom: 12,
     center: new google.maps.LatLng(51.506178,-0.088369),
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
-
   this.map = new google.maps.Map(canvas, mapOptions);
+  this.getWebcams();
 };
 
 $(googleMap.mapSetup.bind(googleMap));

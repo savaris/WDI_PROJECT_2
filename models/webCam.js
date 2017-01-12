@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
-const webCamSchema = mongoose.Schema({
+const webcamSchema = mongoose.Schema({
+  name: String,
   img: String,
   lat: String,
-  lng: String,
-  location: String
+  lng: String
 });
 
-module.exports = mongoose.model('WebCam', webCamSchema);
+module.exports = mongoose.model('Webcam', webcamSchema);

@@ -1,12 +1,12 @@
-const WebCam = require('../models/webCam');
+const Webcam = require('../models/webcam');
 
-function webCamsIndex(req, res){
-  WebCam.find((err, webCams) => {
+function webcamsIndex(req, res){
+  Webcam.find((err, webcams) => {
     if (err) return res.status(500).send();
-    return res.status(200).json({ webCams: webCams });
+    return res.status(200).json({ webcams: webcams });
   });
 }
 
 module.exports = {
-  index: webCamsIndex
+  index: webcamsIndex
 };
