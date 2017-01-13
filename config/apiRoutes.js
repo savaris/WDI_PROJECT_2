@@ -2,7 +2,7 @@ const express  = require('express');
 const router   = express.Router();
 
 const authentications = require('../controllers/authentications');
-// const users = require('../controllers/users');
+const users = require('../controllers/users');
 const webcams = require('../controllers/webcams');
 
 router.route('/register')
@@ -12,11 +12,11 @@ router.route('/login')
 router.route('/webcams')
   .get(webcams.index);
 
-// router.route('/users')
-//   .get(users.index);
-// router.route('/users/:id')
-//   .get(users.show)
-//   .put(users.update)
-//   .delete(users.delete);
+router.route('/users')
+  .get(users.index);
+router.route('/users/:id')
+  .get(users.show)
+  .put(users.update)
+  .delete(users.delete);
 
 module.exports = router;

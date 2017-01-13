@@ -20,7 +20,7 @@ App.init = function() {
 App.loggedInState = function(){
   $('.loggedIn').show();
   $('.loggedOut').hide();
-  this.usersIndex();
+  // this.usersIndex();
   $('#map-canvas').show();
   googleMap.mapSetup();
 };
@@ -111,12 +111,12 @@ App.handleForm = function(e){
   });
 };
 
-App.ajaxRequest = function(url, method, data, callback){
+App.ajaxRequest = function(url, method, data, callback, apiToken){
   return $.ajax({
     url,
     method,
     data,
-    beforeSend: this.setRequestHeader.bind(this)
+    beforeSend: apiToken ? apiToken : this.setRequestHeader.bind(this)
   })
   .done(callback)
   .fail(data => {
@@ -126,6 +126,10 @@ App.ajaxRequest = function(url, method, data, callback){
 
 App.setRequestHeader = function(xhr) {
   return xhr.setRequestHeader('Authorization', `Bearer ${this.getToken()}`);
+};
+
+App.setApiToken = function(xhr) {
+  return xhr.setRequestHeader('X-Mashape-Key', `5N1IqU0Ln5msh2kJB8FNMmu9Ahdrp1BpIWkjsntkQAspOznbn1`);
 };
 
 App.setToken = function(token){
@@ -152,7 +156,8 @@ googleMap.addInfoWindowForWebcam = function(webcam, marker){
     if (typeof this.infoWindow !== 'undefined')this.infoWindow.close();
     this.infoWindow = new google.maps.InfoWindow({
       content: `<div class ="info-marker">
-      <img src="${ webcam.img }"><p>${ webcam.name }</p></div>`
+      <iframe src="${webcam.timelapse.lifetime.embed}?autoplay=1" width="320px" height="240px"></iframe>
+      </div>`
     });
     this.infoWindow.open(this.map, marker);
     this.map.setCenter(marker.getPosition());
@@ -162,7 +167,7 @@ googleMap.addInfoWindowForWebcam = function(webcam, marker){
 };
 
 googleMap.createMarkerForWebcam = function(webcam){
-  const latlng = new google.maps.LatLng(webcam.lat, webcam.lng);
+  const latlng = new google.maps.LatLng(webcam.location.latitude, webcam.location.longitude);
   const marker = new google.maps.Marker({
     position: latlng,
     map: this.map,
@@ -173,7 +178,7 @@ googleMap.createMarkerForWebcam = function(webcam){
 };
 
 googleMap.loopThroughWebcams = function(data) {
-  $.each(data.webcams, (index, webcam) => {
+  $.each(data.result.webcams, (index, webcam) => {
     setTimeout(() => {
       googleMap.createMarkerForWebcam(webcam);
     }, index * 600);
@@ -181,7 +186,10 @@ googleMap.loopThroughWebcams = function(data) {
 };
 
 googleMap.getWebcams = function(){
-  $.get('http://localhost:3000/api/webcams').done(this.loopThroughWebcams);
+  App.ajaxRequest('https://webcamstravel.p.mashape.com/webcams/list/limit=50,0?show=webcams:location,url,timelapse', 'GET', null, this.loopThroughWebcams, App.setApiToken);
+
+
+  // App.ajaxRequest('http://localhost:3000/api/webcams', 'GET', null, this.loopThroughWebcams);
 };
 
 googleMap.mapSetup = function(){
