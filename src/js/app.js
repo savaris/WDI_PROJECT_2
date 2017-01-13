@@ -181,7 +181,7 @@ googleMap.loopThroughWebcams = function(data) {
 };
 
 googleMap.getWebcams = function(){
-  $.get('http://localhost:3000/webcams').done(this.loopThroughWebcams);
+  $.get('http://localhost:3000/api/webcams').done(this.loopThroughWebcams);
 };
 
 googleMap.mapSetup = function(){
