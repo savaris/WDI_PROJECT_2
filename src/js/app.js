@@ -157,12 +157,15 @@ googleMap.addInfoWindowForWebcam = function(webcam, marker){
     this.infoWindow = new google.maps.InfoWindow({
       content: `<div class ="info-marker">
       <iframe src="${webcam.timelapse.month.embed}?autoplay=1" width="320px" height="240px"></iframe>
+      <p>${webcam.title}</p>
+      <p>${webcam.location.country}</p>
+      <p>${webcam.location.city}</p>
+      <p>${webcam.location.region}</p>
       </div>`
     });
     this.infoWindow.open(this.map, marker);
     this.map.setCenter(marker.getPosition());
-    this.map.setZoom(10);
-
+    this.map.setZoom(4);
   });
 };
 
@@ -187,7 +190,10 @@ googleMap.loopThroughWebcams = function(data) {
 
 googleMap.getWebcams = function(){
 
-  App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/country=FR/category=beach/orderby=popularity/limit=20,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
+  // App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/country=FR/category=beach/orderby=popularity/limit=1,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
+
+
+  App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/orderby=popularity/limit=1,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
 
   // App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/category=city/limit=50,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
  // }
@@ -195,18 +201,94 @@ googleMap.getWebcams = function(){
   // for (var i = 0; i < 5; i++) {
   //   App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/category=city/limit=50,${i}?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
   // }
-
-
-
-  // App.ajaxRequest('http://localhost:3000/api/webcams', 'GET', null, this.loopThroughWebcams);
 };
 
 googleMap.mapSetup = function(){
   const canvas = document.getElementById('map-canvas');
   const mapOptions = {
-    zoom: 6,
+    zoom: 4,
     center: new google.maps.LatLng(51.506178,-0.088369),
-    mapTypeId: google.maps.MapTypeId.ROADMAP
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    styles: [
+      {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+      {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+      {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+      {
+        featureType: 'administrative.locality',
+        elementType: 'labels.text.fill',
+        stylers: [{color: '#d59563'}]
+      },
+      {
+        featureType: 'poi',
+        elementType: 'labels.text.fill',
+        stylers: [{color: '#d59563'}]
+      },
+      {
+        featureType: 'poi.park',
+        elementType: 'geometry',
+        stylers: [{color: '#263c3f'}]
+      },
+      {
+        featureType: 'poi.park',
+        elementType: 'labels.text.fill',
+        stylers: [{color: '#6b9a76'}]
+      },
+      {
+        featureType: 'road',
+        elementType: 'geometry',
+        stylers: [{color: '#38414e'}]
+      },
+      {
+        featureType: 'road',
+        elementType: 'geometry.stroke',
+        stylers: [{color: '#212a37'}]
+      },
+      {
+        featureType: 'road',
+        elementType: 'labels.text.fill',
+        stylers: [{color: '#9ca5b3'}]
+      },
+      {
+        featureType: 'road.highway',
+        elementType: 'geometry',
+        stylers: [{color: '#746855'}]
+      },
+      {
+        featureType: 'road.highway',
+        elementType: 'geometry.stroke',
+        stylers: [{color: '#1f2835'}]
+      },
+      {
+        featureType: 'road.highway',
+        elementType: 'labels.text.fill',
+        stylers: [{color: '#f3d19c'}]
+      },
+      {
+        featureType: 'transit',
+        elementType: 'geometry',
+        stylers: [{color: '#2f3948'}]
+      },
+      {
+        featureType: 'transit.station',
+        elementType: 'labels.text.fill',
+        stylers: [{color: '#d59563'}]
+      },
+      {
+        featureType: 'water',
+        elementType: 'geometry',
+        stylers: [{color: '#17263c'}]
+      },
+      {
+        featureType: 'water',
+        elementType: 'labels.text.fill',
+        stylers: [{color: '#515c6d'}]
+      },
+      {
+        featureType: 'water',
+        elementType: 'labels.text.stroke',
+        stylers: [{color: '#17263c'}]
+      }
+    ]
   };
   this.map = new google.maps.Map(canvas, mapOptions);
   this.getWebcams();

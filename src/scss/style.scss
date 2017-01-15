@@ -7,3 +7,17 @@ body {
   width: 100vw;
   margin: 0;
 }
+
+nav.navbar.navbar-light.bg-faded {
+  margin-left: -140px;
+  background-color: #17263c;
+  border-radius: 0px;
+
+  a.navbar-brand {
+    color: white;
+  }
+
+  a.nav-link {
+    color: white;
+  }
+}
