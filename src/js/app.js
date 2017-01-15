@@ -156,7 +156,7 @@ googleMap.addInfoWindowForWebcam = function(webcam, marker){
     if (typeof this.infoWindow !== 'undefined')this.infoWindow.close();
     this.infoWindow = new google.maps.InfoWindow({
       content: `<div class ="info-marker">
-      <iframe src="${webcam.timelapse.lifetime.embed}?autoplay=1" width="320px" height="240px"></iframe>
+      <iframe src="${webcam.timelapse.month.embed}?autoplay=1" width="320px" height="240px"></iframe>
       </div>`
     });
     this.infoWindow.open(this.map, marker);
@@ -181,12 +181,21 @@ googleMap.loopThroughWebcams = function(data) {
   $.each(data.result.webcams, (index, webcam) => {
     setTimeout(() => {
       googleMap.createMarkerForWebcam(webcam);
-    }, index * 600);
+    },index * 500);
   });
 };
 
 googleMap.getWebcams = function(){
-  App.ajaxRequest('https://webcamstravel.p.mashape.com/webcams/list/limit=50,0?show=webcams:location,url,timelapse', 'GET', null, this.loopThroughWebcams, App.setApiToken);
+
+  App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/country=FR/category=beach/orderby=popularity/limit=20,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
+
+  // App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/category=city/limit=50,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
+ // }
+
+  // for (var i = 0; i < 5; i++) {
+  //   App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/category=city/limit=50,${i}?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
+  // }
+
 
 
   // App.ajaxRequest('http://localhost:3000/api/webcams', 'GET', null, this.loopThroughWebcams);
@@ -195,7 +204,7 @@ googleMap.getWebcams = function(){
 googleMap.mapSetup = function(){
   const canvas = document.getElementById('map-canvas');
   const mapOptions = {
-    zoom: 12,
+    zoom: 6,
     center: new google.maps.LatLng(51.506178,-0.088369),
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
