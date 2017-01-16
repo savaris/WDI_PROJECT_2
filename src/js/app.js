@@ -2,7 +2,8 @@ const App = App || {};
 const google = google;
 
 App.init = function() {
-  $('#map-canvas').hide();
+  // $('#map-canvas').hide();
+  App.mapSetup();
   this.apiUrl = 'http://localhost:3000/api';
   this.$main  = $('main');
   this.mapMarkers = [];
@@ -12,7 +13,6 @@ App.init = function() {
   $('.logout').on('click', this.logout.bind(this));
   // $('.usersIndex').on('click', this.usersIndex.bind(this));
   this.$main.on('submit', 'form', this.handleForm);
-
   if (this.getToken()) {
     this.loggedInState();
   } else {
@@ -25,7 +25,7 @@ App.loggedInState = function(){
   $('.loggedOut').hide();
   // this.usersIndex();
   $('#map-canvas').show();
-  App.mapSetup();
+  App.getWebcams();
 };
 
 App.loggedOutState = function(){
@@ -37,40 +37,111 @@ App.loggedOutState = function(){
 
 App.register = function(e){
   if (e) e.preventDefault();
-  this.$main.html(`
-    <h2>Register</h2>
-    <form method="post" action="/register">
-    <div class="form-group">
-    <input class="form-control" type="text" name="user[username]" placeholder="Username">
-    </div>
-    <div class="form-group">
-    <input class="form-control" type="email" name="user[email]" placeholder="Email">
-    </div>
-    <div class="form-group">
-    <input class="form-control" type="password" name="user[password]" placeholder="Password">
-    </div>
-    <div class="form-group">
-    <input class="form-control" type="password" name="user[passwordConfirmation]" placeholder="Password Confirmation">
-    </div>
-    <input class="btn btn-primary" type="submit" value="Register">
-    </form>
+  this.$main.html(`<div class='modal fade' tabindex='-1' role='dialog'>
+  <div class='modal-dialog' role='document'>
+  <div class='modal-content'>
+  <div class='modal-body'>
+  <h2>Register</h2>
+  <form method='post' action='/register'>
+  <div class='form-group'>
+  <input class='form-control-register' type='text' name='user[username]' placeholder='Username'>
+  </div>
+  <div class='form-group'>
+  <input class='form-control-register' type='email' name='user[email]' placeholder='Email'>
+  </div>
+  <div class='form-group'>
+  <input class='form-control-register' type='password' name='user[password]' placeholder='Password'>
+  </div>
+  <div class='form-group'>
+  <input class='form-control-register' type='password' name='user[passwordConfirmation]' placeholder='Password Confirmation'>
+  </div>
+  <input class='btn btn-primary' type='submit' value='Register'>
+  </form>
+  </div>
+  </div>
+  </div>
+  </div>
   `);
+  $('.modal').modal('show');
 };
 
+// App.register = function(e){
+//   if (e) e.preventDefault();
+//   this.$main.html(`
+//     <h2>Register</h2>
+//     <form method='post' action='/register'>
+//     <div class='form-group'>
+//     <input class='form-control' type='text' name='user[username]' placeholder='Username'>
+//     </div>
+//     <div class='form-group'>
+//     <input class='form-control' type='email' name='user[email]' placeholder='Email'>
+//     </div>
+//     <div class='form-group'>
+//     <input class='form-control' type='password' name='user[password]' placeholder='Password'>
+//     </div>
+//     <div class='form-group'>
+//     <input class='form-control' type='password' name='user[passwordConfirmation]' placeholder='Password Confirmation'>
+//     </div>
+//     <input class='btn btn-primary' type='submit' value='Register'>
+//     </form>
+//   `);
+// };
+
+// App.login = function(e){
+//   if (e) e.preventDefault();
+//   this.$main.html(`<div class='modal fade' id='exampleModal' tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true'>
+//   <div class='modal-dialog' role='document'>
+//     <div class='modal-content'>
+//     <div class='modal-header'>
+//       <h5 class='modal-title' id='exampleModalLabel'>Login</h5>
+//       <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+//   </div>
+//   <div class='modal-body'>
+//     <form action='/login' method='POST'>
+//     <div class='form-group'>
+//     <label for='recipient-name' class='form-control-label'>Email:</label>
+//     <input type='text' name='user[email]' class='form-control' id='email'>
+//   </div>
+//   <div class='form-group'>
+//     <label for='recipient-name' class='form-control-label'>Password:</label>
+//     <input type='password' name='user[password]' class='form-control' id='password'>
+//   </div>
+//     <div class='modal-footer'>
+//     <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
+//   <button type='submit' class='btn btn-primary registerUser value='login'>Log In</button>
+//   </div>
+//   </form>
+//   </div>
+//   </div>
+//   </div>
+//   </div>
+//   `);
+//   $('.modal').modal('show');
+// };
+
 App.login = function(e) {
-  e.preventDefault();
+  if(e) e.preventDefault();
   this.$main.html(`
+    <div class='modal fade' tabindex='-1' role='dialog'>
+    <div class='modal-dialog' role='document'>
+    <div class='modal-content'>
+    <div class='modal-body'>
     <h2>Login</h2>
-    <form method="post" action="/login">
-    <div class="form-group">
-    <input class="form-control" type="email" name="email" placeholder="Email">
+    <form method='post' action='/login'>
+    <div class='form-group'>
+    <input class='form-control-login' type='email' name='email' placeholder='Email'>
     </div>
-    <div class="form-group">
-    <input class="form-control" type="password" name="password" placeholder="Password">
+    <div class='form-group'>
+    <input class='form-control-login' type='password' name='password' placeholder='Password'>
     </div>
-    <input class="btn btn-primary" type="submit" value="Login">
+    <input class='btn btn-primary' type='submit' value='Login'>
     </form>
-  `);
+    </div>
+    </div>
+    </div>
+    </div>
+    `);
+  $('.modal').modal('show');
 };
 
 App.logout = function(e){
@@ -87,8 +158,11 @@ App.handleForm = function(e){
   const data   = $(this).serialize();
 
   return App.ajaxRequest(url, method, data, data => {
-    if (data.token) App.setToken(data.token);
-    App.loggedInState();
+    if (data.token) {
+      $('.fade').fadeOut();
+      App.setToken(data.token);
+      App.loggedInState();
+    }
   });
 };
 
@@ -99,10 +173,10 @@ App.ajaxRequest = function(url, method, data, callback, apiToken){
     data,
     beforeSend: apiToken ? apiToken : this.setRequestHeader.bind(this)
   })
-  .done(callback)
-  .fail(data => {
-    console.log(data);
-  });
+    .done(callback)
+    .fail(data => {
+      console.log(data);
+    });
 };
 
 App.setRequestHeader = function(xhr) {
@@ -125,43 +199,44 @@ App.removeToken = function(){
   return window.localStorage.clear();
 };
 
-// ------------------
-//   MAP FUNCTIONS
-// ------------------
+  // ------------------
+  //   MAP FUNCTIONS
+  // ------------------
 
 
-// Modal Pop-Up
+  // Modal Pop-Up
 App.addInfoWindowForWebcam = function(webcam, marker){
-  // Inbuilt defined Google click event
+// Inbuilt defined Google click event
   google.maps.event.addListener(marker, 'click',() => {
+    $('.modal').show();
     $('.modal-body').html(`
-      <ul class="nav nav-tabs">
-        <li class="nav-item active">
-          <a href="#camera" aria-controls="camera" data-toggle="tab">View Camera</a>
-        </li>
-        <li class="nav-item">
-          <a href="#details" aria-controls="details" data-toggle="tab">Details</a>
-        </li>
-        <li class="nav-item">
-          <a href="#weather" aria-controls="weather" data-toggle="tab">Weather</a>
-        </li>
+      <ul class='nav nav-tabs'>
+          <li class='nav-item active'>
+            <a href='#camera' aria-controls='camera' data-toggle='tab'>View Camera</a>
+          </li>
+          <li class='nav-item'>
+            <a href='#details' aria-controls='details' data-toggle='tab'>Details</a>
+          </li>
+          <li class='nav-item'>
+            <a href='#weather' aria-controls='weather' data-toggle='tab'>Weather</a>
+          </li>
       </ul>
 
-      <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="camera">
-          <iframe src="${webcam.timelapse.month.embed}?autoplay=1" width="480px" height="340px"></iframe>
-        </div>
-        <div role="tabpanel" class="tab-pane" id="details">
-          <p>${webcam.title}</p>
-          <p>${webcam.location.country}</p>
-          <p>${webcam.location.city}</p>
-          <p>${webcam.location.region}</p>
-        </div>
-        <div role="tabpanel" class="tab-pane" id="weather">
-          <iframe width='100%' frameBorder='0' style='height: 50vh; margin: 25px 0;' src='https://maps.darksky.net/@temperature,${webcam.location.latitude},${webcam.location.longitude},10?embed=true&timeControl=true&fieldControl=true&defaultField=temperature&defaultUnits=_c'></iframe>
-        </div>
+      <div class='tab-content'>
+        <div role='tabpanel' class='tab-pane active' id='camera'>
+        <iframe src='${webcam.timelapse.month.embed}?autoplay=1' width='480px' height='340px' allowfullscreen></iframe>
       </div>
-    `);
+      <div role='tabpanel' class='tab-pane' id='details'>
+        <p>${webcam.title}</p>
+        <p>${webcam.location.country}</p>
+        <p>${webcam.location.city}</p>
+        <p>${webcam.location.region}</p>
+      </div>
+        <div role='tabpanel' class='tab-pane' id='weather'>
+        <iframe width='100%' frameBorder='0' style='height: 50vh; margin: 25px 0;' src='https://maps.darksky.net/@temperature,${webcam.location.latitude},${webcam.location.longitude},10?embed=true&timeControl=true&fieldControl=true&defaultField=temperature&defaultUnits=_c'></iframe>
+      </div>
+    </div>
+        `);
     $('.modal').modal('show');
   });
 };
@@ -191,21 +266,11 @@ App.createMarkerForWebcam = function(webcam){
   this.addInfoWindowForWebcam(webcam, marker);
 };
 
-
-// Function not working
-// function toggleBounce(marker) {
-//   if (marker.getAnimation() !== null) {
-//     marker.setAnimation(null);
-//   } else {
-//     marker.setAnimation(google.maps.Animation.BOUNCE);
-//   }
-// }
-
 App.loopThroughWebcams = function(data) {
   $.each(data.result.webcams, (index, webcam) => {
     setTimeout(() => {
       App.createMarkerForWebcam(webcam);
-    },index * 500);
+    },index * 400);
   });
 };
 
@@ -213,7 +278,7 @@ App.getWebcams = function(){
 
   // App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/country=FR/category=beach/orderby=popularity/limit=1,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
 
-  App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/continent=EU/property=hd/orderby=views/limit=10,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
+  App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/continent=EU/property=hd/orderby=views/limit=2,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
 
 
   // for (var i = 0; i < 5; i++) {
@@ -222,97 +287,186 @@ App.getWebcams = function(){
 };
 
 App.mapSetup = function(){
+  console.log('building map');
   const canvas = document.getElementById('map-canvas');
   const mapOptions = {
-    zoom: 8,
+    zoom: 7,
     center: new google.maps.LatLng(46.934003, 8.129233),
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     styles: [
-      {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
-      {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
-      {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
       {
-        featureType: 'administrative.locality',
-        elementType: 'labels.text.fill',
-        stylers: [{color: '#d59563'}]
+        'featureType': 'all',
+        'elementType': 'geometry.fill',
+        'stylers': [
+          {
+            'weight': '2.00'
+          }
+        ]
       },
       {
-        featureType: 'poi',
-        elementType: 'labels.text.fill',
-        stylers: [{color: '#d59563'}]
+        'featureType': 'all',
+        'elementType': 'geometry.stroke',
+        'stylers': [
+          {
+            'color': '#9c9c9c'
+          }
+        ]
       },
       {
-        featureType: 'poi.park',
-        elementType: 'geometry',
-        stylers: [{color: '#263c3f'}]
+        'featureType': 'all',
+        'elementType': 'labels.text',
+        'stylers': [
+          {
+            'visibility': 'on'
+          }
+        ]
       },
       {
-        featureType: 'poi.park',
-        elementType: 'labels.text.fill',
-        stylers: [{color: '#6b9a76'}]
+        'featureType': 'landscape',
+        'elementType': 'all',
+        'stylers': [
+          {
+            'color': '#f2f2f2'
+          }
+        ]
       },
       {
-        featureType: 'road',
-        elementType: 'geometry',
-        stylers: [{color: '#38414e'}]
+        'featureType': 'landscape',
+        'elementType': 'geometry.fill',
+        'stylers': [
+          {
+            'color': '#ffffff'
+          }
+        ]
       },
       {
-        featureType: 'road',
-        elementType: 'geometry.stroke',
-        stylers: [{color: '#212a37'}]
+        'featureType': 'landscape.man_made',
+        'elementType': 'geometry.fill',
+        'stylers': [
+          {
+            'color': '#ffffff'
+          }
+        ]
       },
       {
-        featureType: 'road',
-        elementType: 'labels.text.fill',
-        stylers: [{color: '#9ca5b3'}]
+        'featureType': 'poi',
+        'elementType': 'all',
+        'stylers': [
+          {
+            'visibility': 'off'
+          }
+        ]
       },
       {
-        featureType: 'road.highway',
-        elementType: 'geometry',
-        stylers: [{color: '#746855'}]
+        'featureType': 'road',
+        'elementType': 'all',
+        'stylers': [
+          {
+            'saturation': -100
+          },
+          {
+            'lightness': 45
+          }
+        ]
       },
       {
-        featureType: 'road.highway',
-        elementType: 'geometry.stroke',
-        stylers: [{color: '#1f2835'}]
+        'featureType': 'road',
+        'elementType': 'geometry.fill',
+        'stylers': [
+          {
+            'color': '#eeeeee'
+          }
+        ]
       },
       {
-        featureType: 'road.highway',
-        elementType: 'labels.text.fill',
-        stylers: [{color: '#f3d19c'}]
+        'featureType': 'road',
+        'elementType': 'labels.text.fill',
+        'stylers': [
+          {
+            'color': '#7b7b7b'
+          }
+        ]
       },
       {
-        featureType: 'transit',
-        elementType: 'geometry',
-        stylers: [{color: '#2f3948'}]
+        'featureType': 'road',
+        'elementType': 'labels.text.stroke',
+        'stylers': [
+          {
+            'color': '#ffffff'
+          }
+        ]
       },
       {
-        featureType: 'transit.station',
-        elementType: 'labels.text.fill',
-        stylers: [{color: '#d59563'}]
+        'featureType': 'road.highway',
+        'elementType': 'all',
+        'stylers': [
+          {
+            'visibility': 'simplified'
+          }
+        ]
       },
       {
-        featureType: 'water',
-        elementType: 'geometry',
-        stylers: [{color: '#17263c'}]
+        'featureType': 'road.arterial',
+        'elementType': 'labels.icon',
+        'stylers': [
+          {
+            'visibility': 'off'
+          }
+        ]
       },
       {
-        featureType: 'water',
-        elementType: 'labels.text.fill',
-        stylers: [{color: '#515c6d'}]
+        'featureType': 'transit',
+        'elementType': 'all',
+        'stylers': [
+          {
+            'visibility': 'off'
+          }
+        ]
       },
       {
-        featureType: 'water',
-        elementType: 'labels.text.stroke',
-        stylers: [{color: '#17263c'}]
+        'featureType': 'water',
+        'elementType': 'all',
+        'stylers': [
+          {
+            'color': '#46bcec'
+          },
+          {
+            'visibility': 'on'
+          }
+        ]
+      },
+      {
+        'featureType': 'water',
+        'elementType': 'geometry.fill',
+        'stylers': [
+          {
+            'color': '#c8d7d4'
+          }
+        ]
+      },
+      {
+        'featureType': 'water',
+        'elementType': 'labels.text.fill',
+        'stylers': [
+          {
+            'color': '#070707'
+          }
+        ]
+      },
+      {
+        'featureType': 'water',
+        'elementType': 'labels.text.stroke',
+        'stylers': [
+          {
+            'color': '#ffffff'
+          }
+        ]
       }
     ]
   };
-
-  this.map = new google.maps.Map(canvas, mapOptions);
-  this.getWebcams();
+  App.map = new google.maps.Map(canvas, mapOptions);
 };
 
 $(App.init.bind(App));
 
-// $(App.mapSetup.bind(App));
+    // $(App.mapSetup.bind(App));

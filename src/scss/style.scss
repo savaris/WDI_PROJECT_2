@@ -1,5 +1,5 @@
 body {
-  background: #17263c;
+  background: white;
 }
 
 #map-canvas {
@@ -8,28 +8,69 @@ body {
   margin: 0;
 }
 
+img.logo {
+  width: 140px;
+  height: 30px;
+}
+
 nav.navbar.navbar-light.bg-faded {
-  margin-left: -140px;
-  background-color: #17263c;
+  // margin-left: -140px;
+  background-color: white;
   border-radius: 0px;
 
   a.navbar-brand {
-    color: #d59563;
+    color: black;
+    margin-left: -74px;
   }
 
   a.nav-link {
-    color: #d59563;
+    color: black;
   }
 }
 
 .modal-content, .modal-body {
- background: white;
  margin: 0;
  padding: 0;
  overflow: hidden;
  text-align: center;
+   background: #e2e2e2;
+   border: 1px solid white;
+   border-radius: 4px;
+   h2{
+     color: #999999;
+   }
+     input.form-control-register{
+       width: 580px;
+       height: 40px;
+       margin: auto;
+       border: 2px solid #999999;
+       border-radius: 8px;
+       text-align: center;
+   }
+       .form-control-login{
+         width: 580px;
+         height: 40px;
+         margin: auto;
+         border: 2px solid #999999;
+         border-radius: 8px;
+         text-align: center;
+     }
 }
 
 .info-content {
   height: 400px;
+}
+
+ul.nav.nav-tabs {
+  height: 40px;
+  a{
+
+  }
+}
+
+input.btn.btn-primary {
+  background: white;
+  border: 2px solid #999999;
+  color: #999999;
+  margin-bottom: 12px;
 }
