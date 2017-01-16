@@ -44,7 +44,7 @@ nav.navbar.navbar-light.bg-faded {
        height: 40px;
        margin: auto;
        border: 2px solid #999999;
-       border-radius: 8px;
+       border-radius: 4px;
        text-align: center;
    }
        .form-control-login{
@@ -52,8 +52,17 @@ nav.navbar.navbar-light.bg-faded {
          height: 40px;
          margin: auto;
          border: 2px solid #999999;
-         border-radius: 8px;
+         border-radius: 4px;
          text-align: center;
+     }
+     iframe {
+       border: 3px solid white;
+       border-radius: 4px;
+       margin-bottom: 4px;
+       width: 98%;
+     }
+     p{
+       color: #999999;
      }
 }
 
@@ -62,10 +71,21 @@ nav.navbar.navbar-light.bg-faded {
 }
 
 ul.nav.nav-tabs {
-  height: 40px;
-  a{
-
-  }
+  margin-top: 6px;
+  margin-bottom: 5px;
+  margin-right: 4px;
+  background: white;
+  border-radius: 4px;
+  display: inline-flex;
+  height: 36px;
+  width: 300px;
+  border: 2px solid #999999;
+  text-decoration: none;
+    a{
+      margin-left: 20px;
+      color: #999999;
+      font-size: 22px;
+    }
 }
 
 input.btn.btn-primary {

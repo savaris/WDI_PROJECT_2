@@ -204,7 +204,7 @@ App.removeToken = function(){
   // ------------------
 
 
-  // Modal Pop-Up
+// Modal Pop-Up
 App.addInfoWindowForWebcam = function(webcam, marker){
 // Inbuilt defined Google click event
   google.maps.event.addListener(marker, 'click',() => {
@@ -212,7 +212,7 @@ App.addInfoWindowForWebcam = function(webcam, marker){
     $('.modal-body').html(`
       <ul class='nav nav-tabs'>
           <li class='nav-item active'>
-            <a href='#camera' aria-controls='camera' data-toggle='tab'>View Camera</a>
+            <a href='#camera' aria-controls='camera' data-toggle='tab'>Camera</a>
           </li>
           <li class='nav-item'>
             <a href='#details' aria-controls='details' data-toggle='tab'>Details</a>
@@ -227,13 +227,13 @@ App.addInfoWindowForWebcam = function(webcam, marker){
         <iframe src='${webcam.timelapse.month.embed}?autoplay=1' width='480px' height='340px' allowfullscreen></iframe>
       </div>
       <div role='tabpanel' class='tab-pane' id='details'>
-        <p>${webcam.title}</p>
-        <p>${webcam.location.country}</p>
-        <p>${webcam.location.city}</p>
-        <p>${webcam.location.region}</p>
+        <p>Title: ${webcam.title}</p>
+        <p>Country: ${webcam.location.country}</p>
+        <p>City: ${webcam.location.city}</p>
+        <p>Region: ${webcam.location.region}</p>
       </div>
         <div role='tabpanel' class='tab-pane' id='weather'>
-        <iframe width='100%' frameBorder='0' style='height: 50vh; margin: 25px 0;' src='https://maps.darksky.net/@temperature,${webcam.location.latitude},${webcam.location.longitude},10?embed=true&timeControl=true&fieldControl=true&defaultField=temperature&defaultUnits=_c'></iframe>
+        <iframe width='96%%' frameBorder='0' style='height: 50vh; margin: 25px 0;' src='https://maps.darksky.net/@temperature,${webcam.location.latitude},${webcam.location.longitude},10?embed=true&timeControl=true&fieldControl=true&defaultField=temperature&defaultUnits=_c'></iframe>
       </div>
     </div>
         `);
