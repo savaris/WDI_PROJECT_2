@@ -1,13 +1,16 @@
 const App = App || {};
+const google = google;
 
 App.init = function() {
   $('#map-canvas').hide();
   this.apiUrl = 'http://localhost:3000/api';
   this.$main  = $('main');
+  this.mapMarkers = [];
+
   $('.register').on('click', this.register.bind(this));
   $('.login').on('click', this.login.bind(this));
   $('.logout').on('click', this.logout.bind(this));
-  $('.usersIndex').on('click', this.usersIndex.bind(this));
+  // $('.usersIndex').on('click', this.usersIndex.bind(this));
   this.$main.on('submit', 'form', this.handleForm);
 
   if (this.getToken()) {
@@ -22,7 +25,7 @@ App.loggedInState = function(){
   $('.loggedOut').hide();
   // this.usersIndex();
   $('#map-canvas').show();
-  googleMap.mapSetup();
+  App.mapSetup();
 };
 
 App.loggedOutState = function(){
@@ -37,19 +40,19 @@ App.register = function(e){
   this.$main.html(`
     <h2>Register</h2>
     <form method="post" action="/register">
-      <div class="form-group">
-        <input class="form-control" type="text" name="user[username]" placeholder="Username">
-      </div>
-      <div class="form-group">
-        <input class="form-control" type="email" name="user[email]" placeholder="Email">
-      </div>
-      <div class="form-group">
-        <input class="form-control" type="password" name="user[password]" placeholder="Password">
-      </div>
-      <div class="form-group">
-        <input class="form-control" type="password" name="user[passwordConfirmation]" placeholder="Password Confirmation">
-      </div>
-      <input class="btn btn-primary" type="submit" value="Register">
+    <div class="form-group">
+    <input class="form-control" type="text" name="user[username]" placeholder="Username">
+    </div>
+    <div class="form-group">
+    <input class="form-control" type="email" name="user[email]" placeholder="Email">
+    </div>
+    <div class="form-group">
+    <input class="form-control" type="password" name="user[password]" placeholder="Password">
+    </div>
+    <div class="form-group">
+    <input class="form-control" type="password" name="user[passwordConfirmation]" placeholder="Password Confirmation">
+    </div>
+    <input class="btn btn-primary" type="submit" value="Register">
     </form>
   `);
 };
@@ -59,13 +62,13 @@ App.login = function(e) {
   this.$main.html(`
     <h2>Login</h2>
     <form method="post" action="/login">
-      <div class="form-group">
-        <input class="form-control" type="email" name="email" placeholder="Email">
-      </div>
-      <div class="form-group">
-        <input class="form-control" type="password" name="password" placeholder="Password">
-      </div>
-      <input class="btn btn-primary" type="submit" value="Login">
+    <div class="form-group">
+    <input class="form-control" type="email" name="email" placeholder="Email">
+    </div>
+    <div class="form-group">
+    <input class="form-control" type="password" name="password" placeholder="Password">
+    </div>
+    <input class="btn btn-primary" type="submit" value="Login">
     </form>
   `);
 };
@@ -74,29 +77,6 @@ App.logout = function(e){
   e.preventDefault();
   this.removeToken();
   this.loggedOutState();
-};
-
-App.usersIndex = function(e) {
-  if (e) e.preventDefault();
-  const url = `${this.apiUrl}/users`;
-
-  return this.ajaxRequest(url, 'get', null, data => {
-    this.$main.html(`
-      <div class="card-deck-wrapper">
-        <div class="card-deck">
-        </div>
-      </div>
-    `);
-    const $container = this.$main.find('.card-deck');
-    $.each(data.users, (i, user) => {
-      $container.append(`
-        <div class="card col-md-4">
-         <div class="card-block">
-           <h4 class="card-title">${user.username}</h4>
-          </div>
-       </div>`);
-    });
-  });
 };
 
 App.handleForm = function(e){
@@ -126,7 +106,7 @@ App.ajaxRequest = function(url, method, data, callback, apiToken){
 };
 
 App.setRequestHeader = function(xhr) {
-  return xhr.setRequestHeader('Authorization', `Bearer ${this.getToken()}`);
+  return xhr.setRequestHeader('Authorization', `Bearer       ${this.getToken()}`);
 };
 
 App.setApiToken = function(xhr) {
@@ -145,65 +125,59 @@ App.removeToken = function(){
   return window.localStorage.clear();
 };
 
-$(App.init.bind(App));
+// ------------------
+//   MAP FUNCTIONS
+// ------------------
 
-// Map functions
-const googleMap = googleMap || {};
-const google = google;
 
 // Modal Pop-Up
-googleMap.addInfoWindowForWebcam = function(webcam, marker){
+App.addInfoWindowForWebcam = function(webcam, marker){
   // Inbuilt defined Google click event
   google.maps.event.addListener(marker, 'click',() => {
     $('.modal-body').html(`
-      <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active">
-          <a href="#camera" aria-controls="camera" role="tab" data-toggle="tab">Web Camera</a>
+      <ul class="nav nav-tabs">
+        <li class="nav-item active">
+          <a href="#camera" aria-controls="camera" data-toggle="tab">View Camera</a>
+        </li>
+        <li class="nav-item">
+          <a href="#details" aria-controls="details" data-toggle="tab">Details</a>
+        </li>
+        <li class="nav-item">
+          <a href="#weather" aria-controls="weather" data-toggle="tab">Weather</a>
+        </li>
+      </ul>
+
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="camera">
           <iframe src="${webcam.timelapse.month.embed}?autoplay=1" width="480px" height="340px"></iframe>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="details">
           <p>${webcam.title}</p>
           <p>${webcam.location.country}</p>
           <p>${webcam.location.city}</p>
           <p>${webcam.location.region}</p>
-        </li>
-        <li role="presentation">
-          <a href="#forecast" aria-controls="forecast" role="tab" data-toggle="tab">Forecast</a>
-        </li>
-        <li role="presentation">
-          <a href="#uploads" aria-controls="uploads" role="tab" data-toggle="tab">Recent Uploads</a>
-        </li>
-      </ul>
-
-         <!-- Tab panes -->
-         <div class="tab-content">
-          <div role="tabpanel" class="tab-pane active" id="home">
         </div>
-          <div role="tabpanel" class="tab-pane" id="Forecast">
+        <div role="tabpanel" class="tab-pane" id="weather">
+          <iframe width='100%' frameBorder='0' style='height: 50vh; margin: 25px 0;' src='https://maps.darksky.net/@temperature,${webcam.location.latitude},${webcam.location.longitude},10?embed=true&timeControl=true&fieldControl=true&defaultField=temperature&defaultUnits=_c'></iframe>
         </div>
-          <div role="tabpanel" class="tab-pane" id="Recent Uploads">
-      </div>`);
+      </div>
+    `);
     $('.modal').modal('show');
   });
 };
 
-// Info Window Pop-Up
-// googleMap.addInfoWindowForWebcam = function(webcam, marker){
-//   // Inbuilt defined Google click event
-//   google.maps.event.addListener(marker, 'click',() => {
-// if (typeof this.infoWindow !== 'undefined')this.infoWindow.close();
-// this.infoWindow = new google.maps.InfoWindow({
-//   content: `<div class ="info-marker">
-//   <iframe src="${webcam.timelapse.month.embed}?autoplay=1" width="480px" height="340px"></iframe>
-//   <p>${webcam.title}</p>
-//   <p>${webcam.location.country}</p>
-//   <p>${webcam.location.city}</p>
-//   <p>${webcam.location.region}</p>
-//   </div>`
-// });
-// this.infoWindow.open(this.map, marker);
-// this.map.setCenter(marker.getPosition());
-// this.map.setZoom(12);
+App.toggleBounce = function(marker) {
+  google.maps.event.addListener(marker, 'click',() => {
 
-googleMap.createMarkerForWebcam = function(webcam){
+    $.each(this.mapMarkers, (index, marker) => {
+      marker.setAnimation(null);
+    });
+
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+  });
+};
+
+App.createMarkerForWebcam = function(webcam){
   const latlng = new google.maps.LatLng(webcam.location.latitude, webcam.location.longitude);
   const marker = new google.maps.Marker({
     position: latlng,
@@ -211,35 +185,35 @@ googleMap.createMarkerForWebcam = function(webcam){
     icon: '/images/icon.jpg',
     animation: google.maps.Animation.DROP
   });
+
+  this.mapMarkers.push(marker);
+  this.toggleBounce(marker);
   this.addInfoWindowForWebcam(webcam, marker);
-  marker.addListener('click', toggleBounce);
 };
 
-// Function not working
-function toggleBounce(marker) {
-  if (marker.getAnimation() !== null) {
-    marker.setAnimation(null);
-  } else {
-    marker.setAnimation(google.maps.Animation.BOUNCE);
-  }
-}
 
-googleMap.loopThroughWebcams = function(data) {
+// Function not working
+// function toggleBounce(marker) {
+//   if (marker.getAnimation() !== null) {
+//     marker.setAnimation(null);
+//   } else {
+//     marker.setAnimation(google.maps.Animation.BOUNCE);
+//   }
+// }
+
+App.loopThroughWebcams = function(data) {
   $.each(data.result.webcams, (index, webcam) => {
     setTimeout(() => {
-      googleMap.createMarkerForWebcam(webcam);
+      App.createMarkerForWebcam(webcam);
     },index * 500);
   });
 };
 
-googleMap.getWebcams = function(){
+App.getWebcams = function(){
 
   // App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/country=FR/category=beach/orderby=popularity/limit=1,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
 
-
-  // App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/orderby=popularity/limit=1,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
-
-  App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/continent=EU/property=hd/orderby=views/limit=1,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
+  App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/continent=EU/property=hd/orderby=views/limit=10,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
 
 
   // for (var i = 0; i < 5; i++) {
@@ -247,7 +221,7 @@ googleMap.getWebcams = function(){
   // }
 };
 
-googleMap.mapSetup = function(){
+App.mapSetup = function(){
   const canvas = document.getElementById('map-canvas');
   const mapOptions = {
     zoom: 8,
@@ -334,9 +308,11 @@ googleMap.mapSetup = function(){
       }
     ]
   };
+
   this.map = new google.maps.Map(canvas, mapOptions);
   this.getWebcams();
 };
 
+$(App.init.bind(App));
 
-$(googleMap.mapSetup.bind(googleMap));
+// $(App.mapSetup.bind(App));
