@@ -1,5 +1,5 @@
 body {
-  background: #BADA55;
+  background: #17263c;
 }
 
 #map-canvas {
@@ -14,10 +14,18 @@ nav.navbar.navbar-light.bg-faded {
   border-radius: 0px;
 
   a.navbar-brand {
-    color: white;
+    color: #d59563;
   }
 
   a.nav-link {
-    color: white;
+    color: #d59563;
   }
+}
+
+.modal-content, .modal-body {
+ background: white;
+ margin: 0;
+ padding: 0;
+ overflow: hidden;
+ text-align: center;
 }

@@ -28,6 +28,7 @@ App.loggedInState = function(){
 App.loggedOutState = function(){
   $('.loggedIn').hide();
   $('.loggedOut').show();
+  // $('#map-canvas').hide();
   this.register();
 };
 
@@ -144,41 +145,84 @@ App.removeToken = function(){
   return window.localStorage.clear();
 };
 
-// Map functions
 $(App.init.bind(App));
 
+// Map functions
 const googleMap = googleMap || {};
 const google = google;
 
+// Modal Pop-Up
 googleMap.addInfoWindowForWebcam = function(webcam, marker){
   // Inbuilt defined Google click event
   google.maps.event.addListener(marker, 'click',() => {
-    if (typeof this.infoWindow !== 'undefined')this.infoWindow.close();
-    this.infoWindow = new google.maps.InfoWindow({
-      content: `<div class ="info-marker">
-      <iframe src="${webcam.timelapse.month.embed}?autoplay=1" width="320px" height="240px"></iframe>
-      <p>${webcam.title}</p>
-      <p>${webcam.location.country}</p>
-      <p>${webcam.location.city}</p>
-      <p>${webcam.location.region}</p>
-      </div>`
-    });
-    this.infoWindow.open(this.map, marker);
-    this.map.setCenter(marker.getPosition());
-    this.map.setZoom(4);
+    $('.modal-body').html(`
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+          <a href="#camera" aria-controls="camera" role="tab" data-toggle="tab">Web Camera</a>
+          <iframe src="${webcam.timelapse.month.embed}?autoplay=1" width="480px" height="340px"></iframe>
+          <p>${webcam.title}</p>
+          <p>${webcam.location.country}</p>
+          <p>${webcam.location.city}</p>
+          <p>${webcam.location.region}</p>
+        </li>
+        <li role="presentation">
+          <a href="#forecast" aria-controls="forecast" role="tab" data-toggle="tab">Forecast</a>
+        </li>
+        <li role="presentation">
+          <a href="#uploads" aria-controls="uploads" role="tab" data-toggle="tab">Recent Uploads</a>
+        </li>
+      </ul>
+
+         <!-- Tab panes -->
+         <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="home">
+        </div>
+          <div role="tabpanel" class="tab-pane" id="Forecast">
+        </div>
+          <div role="tabpanel" class="tab-pane" id="Recent Uploads">
+      </div>`);
+    $('.modal').modal('show');
   });
 };
+
+// Info Window Pop-Up
+// googleMap.addInfoWindowForWebcam = function(webcam, marker){
+//   // Inbuilt defined Google click event
+//   google.maps.event.addListener(marker, 'click',() => {
+// if (typeof this.infoWindow !== 'undefined')this.infoWindow.close();
+// this.infoWindow = new google.maps.InfoWindow({
+//   content: `<div class ="info-marker">
+//   <iframe src="${webcam.timelapse.month.embed}?autoplay=1" width="480px" height="340px"></iframe>
+//   <p>${webcam.title}</p>
+//   <p>${webcam.location.country}</p>
+//   <p>${webcam.location.city}</p>
+//   <p>${webcam.location.region}</p>
+//   </div>`
+// });
+// this.infoWindow.open(this.map, marker);
+// this.map.setCenter(marker.getPosition());
+// this.map.setZoom(12);
 
 googleMap.createMarkerForWebcam = function(webcam){
   const latlng = new google.maps.LatLng(webcam.location.latitude, webcam.location.longitude);
   const marker = new google.maps.Marker({
     position: latlng,
     map: this.map,
+    icon: '/images/icon.jpg',
     animation: google.maps.Animation.DROP
   });
   this.addInfoWindowForWebcam(webcam, marker);
-
+  marker.addListener('click', toggleBounce);
 };
+
+// Function not working
+function toggleBounce(marker) {
+  if (marker.getAnimation() !== null) {
+    marker.setAnimation(null);
+  } else {
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+  }
+}
 
 googleMap.loopThroughWebcams = function(data) {
   $.each(data.result.webcams, (index, webcam) => {
@@ -193,10 +237,10 @@ googleMap.getWebcams = function(){
   // App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/country=FR/category=beach/orderby=popularity/limit=1,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
 
 
-  App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/orderby=popularity/limit=1,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
+  // App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/orderby=popularity/limit=1,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
 
-  // App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/category=city/limit=50,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
- // }
+  App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/continent=EU/property=hd/orderby=views/limit=1,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
+
 
   // for (var i = 0; i < 5; i++) {
   //   App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/category=city/limit=50,${i}?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
@@ -206,8 +250,8 @@ googleMap.getWebcams = function(){
 googleMap.mapSetup = function(){
   const canvas = document.getElementById('map-canvas');
   const mapOptions = {
-    zoom: 4,
-    center: new google.maps.LatLng(51.506178,-0.088369),
+    zoom: 8,
+    center: new google.maps.LatLng(46.934003, 8.129233),
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     styles: [
       {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
@@ -293,5 +337,6 @@ googleMap.mapSetup = function(){
   this.map = new google.maps.Map(canvas, mapOptions);
   this.getWebcams();
 };
+
 
 $(googleMap.mapSetup.bind(googleMap));
