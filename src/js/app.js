@@ -186,7 +186,8 @@ App.addInfoWindowForWebcam = function(webcam, marker){
     </div>
         `);
       $('.modal').modal('show');
-      // this.map.setZoom(7);
+      this.map.setCenter(marker.getPosition());
+      this.map.setZoom(12);
     });
   }, null);
 };
@@ -199,7 +200,6 @@ App.toggleBounce = function(marker) {
     });
 
     marker.setAnimation(google.maps.Animation.BOUNCE);
-    this.map.setZoom(12);
   });
 };
 
@@ -218,7 +218,9 @@ App.createMarkerForWebcam = function(webcam){
 };
 
 App.loopThroughWebcams = function(data) {
+  console.log(data);
   $.each(data.result.webcams, (index, webcam) => {
+    // console.log(webcam);
     setTimeout(() => {
       App.createMarkerForWebcam(webcam);
     },index * 400);
@@ -229,15 +231,28 @@ App.getWebcams = function(){
   App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/continent=EU/property=hd/orderby=views/limit=4,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
 };
 
+App.getNearcams = function(object){
+  App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/limit=4/nearby=${object.lat},${object.lng},250?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
+};
+
 App.mapSetup = function(){
   const canvas = document.getElementById('map-canvas');
   const mapOptions = {
     zoom: 7,
     center: new google.maps.LatLng(46.631204, 8.593613),
     mapTypeId: google.maps.MapTypeId.ROADMAP,
-    styles: [{'featureType': 'water','elementType': 'geometry','stylers': [{'color': '#e9e9e9'},{'lightness': 17}]},{'featureType': 'landscape','elementType': 'geometry','stylers': [{'color': '#f5f5f5'},{'lightness': 20}]},{'featureType': 'road.highway','elementType': 'geometry.fill','stylers': [{'color': '#ffffff'},{'lightness': 17}]},{'featureType': 'road.highway','elementType': 'geometry.stroke','stylers': [{'color': '#ffffff'},{'lightness': 29},{'weight': 0.2}]},{'featureType': 'road.arterial','elementType': 'geometry','stylers': [{'color': '#ffffff'},{'lightness': 18}]},{'featureType': 'road.local','elementType': 'geometry','stylers': [{'color': '#ffffff'},{'lightness': 16}]},{'featureType': 'poi','elementType': 'geometry','stylers': [{'color': '#f5f5f5'},{'lightness': 21}]},{'featureType': 'poi.park','elementType': 'geometry','stylers': [{'color': '#dedede'},{'lightness': 21}]},{'elementType': 'labels.text.stroke','stylers': [{'visibility': 'on'},{'color': '#ffffff'},{'lightness': 16}]},{'elementType': 'labels.text.fill','stylers': [{'saturation': 36},{'color': '#333333'},{'lightness': 40}]},{'elementType': 'labels.icon','stylers': [{'visibility': 'off'}]},{'featureType': 'transit','elementType': 'geometry','stylers': [{'color': '#f2f2f2'},{'lightness': 19}]},{'featureType': 'administrative','elementType': 'geometry.fill','stylers': [{'color': '#fefefe'},{'lightness': 20}]},{'featureType': 'administrative','elementType': 'geometry.stroke','stylers': [{'color': '#fefefe'},{'lightness': 17},{'weight': 1.2}]}]
+    styles: [{'featureType': 'water','elementType': 'geometry','stylers': [{'color': '#e9e9e9'},{'lightness': 17}]},{'featureType': 'landscape','elementType': 'geometry','stylers': [{'color': '#f5f5f5'},{'lightness': 20}]},{'featureType': 'road.highway','elementType': 'geometry.fill','stylers': [{'color': '#ba0000'},{'lightness': 17}]},{'featureType': 'road.highway','elementType': 'geometry.stroke','stylers': [{'color': '#000000'},{'lightness': 29},{'weight': 0.2}]},{'featureType': 'road.arterial','elementType': 'geometry','stylers': [{'color': '#dedede'},{'lightness': 18}]},{'featureType': 'road.local','elementType': 'geometry','stylers': [{'color': '#dedede'},{'lightness': 16}]},{'featureType': 'poi','elementType': 'geometry','stylers': [{'color': '#dedede'},{'lightness': 21}]},{'featureType': 'poi.park','elementType': 'geometry','stylers': [{'color': '#dedede'},{'lightness': 21}]},{'elementType': 'labels.text.stroke','stylers': [{'visibility': 'on'},{'color': '#ffffff'},{'lightness': 16}]},{'elementType': 'labels.text.fill','stylers': [{'saturation': 36},{'color': '#990000'},{'lightness': 40}]},{'elementType': 'labels.icon','stylers': [{'visibility': 'off'}]},{'featureType': 'transit','elementType': 'geometry','stylers': [{'color': '#f2f2f2'},{'lightness': 19}]},{'featureType': 'administrative','elementType': 'geometry.fill','stylers': [{'color': '#dedede'},{'lightness': 20}]},{'featureType': 'administrative','elementType': 'geometry.stroke','stylers': [{'color': '#dedede'},{'lightness': 17},{'weight': 1.2}]}]
   };
   App.map = new google.maps.Map(canvas, mapOptions);
+  App.map.addListener('dblclick', function(e) {
+  console.log(e);
+  const lat = parseFloat(e.latLng.lat());
+  const lng = parseFloat(e.latLng.lng());
+  // App.guessCoords = 'latlng=' + lat +', ' + lng;
+  App.updateCoords = {lat: lat, lng: lng};
+  console.log(App.updateCoords);
+  App.getNearcams(App.updateCoords);
+});
 };
 
 App.clearMarker = function(){
