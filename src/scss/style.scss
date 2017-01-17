@@ -1,8 +1,11 @@
+@import "pace";
+
 html, body {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding:0;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding:0;
+  font-family: 'Open Sans Condensed', "Helvetica Neue", sans-serif;
 }
 
 #map-canvas {
@@ -14,105 +17,79 @@ html, body {
   z-index: 1;
 }
 
-img.logo {
-  width: 140px;
-  height: 30px;
-}
-
-nav.navbar.navbar-light.bg-faded {
-  width: 186px;
-  position: fixed;
-  z-index: 2;
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-  margin-left: 10px;
-  margin-left: 548px;
-  margin-top: 12px;
+.modal-body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  text-align: center;
+  background: #FFF;
+  border: 5px solid #FFF;
+  border-right: 15px solid #FFF;
+  border-left: 15px solid #FFF;
+  border-radius: 0;
+  h2 {
+    color: #000;
+    padding: 20px 0;
   }
-  a.navbar-brand {
-    font-family: 'Shrikhand', cursive;
-    font-family: 'Righteous', cursive;
-    margin-left: -74px;
+  .form-control-register{
+    width: 100%;
+    height: 40px;
+    margin: auto;
+    border: 2px solid #000;
+    border-radius: 4px;
+    text-align: center;
   }
-  a.nav-link {
-    font-family: 'Shrikhand', cursive;
-    font-family: 'Righteous', cursive;
-    color: #000000;
-    margin-left: -8px;
-   }
+  .form-control-login{
+    width: 100%;
+    height: 40px;
+    margin: auto;
+    border: 2px solid #000;
+    border-radius: 4px;
+    text-align: center;
   }
-}
-
-.modal-content, .modal-body {
- margin: 0;
- padding: 0;
- overflow: hidden;
- text-align: center;
-   background: #e2e2e2;
-   border: 1px solid white;
-   border-radius: 4px;
-   h2{
-     color: #999999;
-     font-family: 'Shrikhand', cursive;
-     font-family: 'Righteous', cursive;
-   }
-      .form-control-register{
-       font-family: 'Shrikhand', cursive;
-       font-family: 'Righteous', cursive;
-       width: 580px;
-       height: 40px;
-       margin: auto;
-       border: 2px solid #999999;
-       border-radius: 4px;
-       text-align: center;
-   }
-       .form-control-login{
-         font-family: 'Shrikhand', cursive;
-         font-family: 'Righteous', cursive;
-         width: 580px;
-         height: 40px;
-         margin: auto;
-         border: 2px solid #999999;
-         border-radius: 4px;
-         text-align: center;
-     }
-     iframe {
-       border: 3px solid white;
-       border-radius: 4px;
-       margin-bottom: 4px;
-       width: 98%;
-     }
-     p{
-       font-family: 'Shrikhand', cursive;
-       font-family: 'Righteous', cursive;
-       color: #999999;
-     }
+  input.btn.btn-primary {
+    background: #fa0028;
+    border-color: #fa0028;
+    color: #FFF;
+  }
+  iframe {
+    border: 3px solid white;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    width: 98%;
+  }
+  p{
+    color: #999999;
+  }
 }
 
 .info-content {
   height: 400px;
 }
 
+.nav-tabs {
+  border: 0;
+}
+
 ul.nav.nav-tabs {
-  font-family: 'Shrikhand', cursive;
-  font-family: 'Righteous', cursive;
-  margin-top: 6px;
-  margin-bottom: 5px;
-  margin-right: 4px;
-  background: white;
-  border-radius: 4px;
-  display: inline-flex;
-  height: 36px;
-  width: 324px;
-  border: 2px solid #999999;
-  text-decoration: none;
-    a{
-      font-family: 'Shrikhand', cursive;
-      font-family: 'Righteous', cursive;
-      margin-left: 20px;
-      color: #999999;
-      font-size: 22px;
-    }
+  a {
+    display: inline-block;
+    font-size: 22px;
+    padding: 10px;
+  }
+}
+
+.bg-faded {
+  background-color: #fa0028;
+  border-radius: 0;
+}
+
+.navbar-brand {
+  color: #FFF !important;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: #FAFAFA;
 }
 
 input.btn.btn-primary {
@@ -120,4 +97,8 @@ input.btn.btn-primary {
   border: 2px solid #999999;
   color: #999999;
   margin-bottom: 12px;
+}
+
+.modal-body h2, .modal-body p, .modal-content h2, .modal-content p, ul.nav.nav-tabs a {
+  color: #222;
 }

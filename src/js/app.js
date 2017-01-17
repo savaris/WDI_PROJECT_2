@@ -2,7 +2,6 @@ const App = App || {};
 const google = google;
 
 App.init = function() {
-  // $('#map-canvas').hide();
   App.mapSetup();
   this.apiUrl = 'http://localhost:3000/api';
   this.$main  = $('main');
@@ -11,7 +10,6 @@ App.init = function() {
   $('.register').on('click', this.register.bind(this));
   $('.login').on('click', this.login.bind(this));
   $('.logout').on('click', this.logout.bind(this));
-  // $('.usersIndex').on('click', this.usersIndex.bind(this));
   this.$main.on('submit', 'form', this.handleForm);
   if (this.getToken()) {
     this.loggedInState();
@@ -23,7 +21,6 @@ App.init = function() {
 App.loggedInState = function(){
   $('.loggedIn').show();
   $('.loggedOut').hide();
-  // this.usersIndex();
   $('#map-canvas').show();
   App.getWebcams();
 };
@@ -31,8 +28,8 @@ App.loggedInState = function(){
 App.loggedOutState = function(){
   $('.loggedIn').hide();
   $('.loggedOut').show();
-  // $('#map-canvas').hide();
   this.register();
+  this.clearMarker();
 };
 
 App.register = function(e){
@@ -145,14 +142,7 @@ App.removeToken = function(){
   return window.localStorage.clear();
 };
 
-  // ------------------
-  //   MAP FUNCTIONS
-  // ------------------
-
-
-// Modal Pop-Up
 App.addInfoWindowForWebcam = function(webcam, marker){
-// Inbuilt defined Google click event
   google.maps.event.addListener(marker, 'click',() => {
     this.ajaxRequest(`http://localhost:3000/api/forecast/${webcam.location.latitude}/${webcam.location.longitude}`, 'get', null, data => {
       this.$main.html(`<div class='modal fade' tabindex='-1' role='dialog'>
@@ -161,13 +151,13 @@ App.addInfoWindowForWebcam = function(webcam, marker){
       <div class='modal-body'>
       <ul class='nav nav-tabs'>
           <li class='nav-item active'>
-            <a href='#camera' aria-controls='camera' data-toggle='tab'>Camera</a>
+            <a href='#camera' aria-controls='camera' data-toggle='tab'><i class="fa fa-video-camera" aria-hidden="true"></i> Camera</a>
           </li>
           <li class='nav-item'>
-            <a href='#details' aria-controls='details' data-toggle='tab'>Details</a>
+            <a href='#details' aria-controls='details' data-toggle='tab'><i class="fa fa-info" aria-hidden="true"></i> Details</a>
           </li>
           <li class='nav-item'>
-            <a href='#weather' aria-controls='weather' data-toggle='tab'>Weather</a>
+            <a href='#weather' aria-controls='weather' data-toggle='tab'><i class="fa fa-sun-o" aria-hidden="true"></i> Weather</a>
           </li>
       </ul>
 
@@ -230,196 +220,24 @@ App.loopThroughWebcams = function(data) {
 };
 
 App.getWebcams = function(){
-
-  // App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/country=GB/category=beach/orderby=popularity/limit=1,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
-
   App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/continent=EU/property=hd/orderby=views/limit=4,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
-
-
-  // for (var i = 0; i < 5; i++) {
-  //   App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/category=city/limit=50,${i}?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
-  // }
 };
 
 App.mapSetup = function(){
-  console.log('building map');
   const canvas = document.getElementById('map-canvas');
   const mapOptions = {
     zoom: 9,
     center: new google.maps.LatLng(46.631204, 8.593613),
     mapTypeId: google.maps.MapTypeId.ROADMAP,
-    styles: [
-      {
-        'featureType': 'all',
-        'elementType': 'geometry.fill',
-        'stylers': [
-          {
-            'weight': '2.00'
-          }
-        ]
-      },
-      {
-        'featureType': 'all',
-        'elementType': 'geometry.stroke',
-        'stylers': [
-          {
-            'color': '#9c9c9c'
-          }
-        ]
-      },
-      {
-        'featureType': 'all',
-        'elementType': 'labels.text',
-        'stylers': [
-          {
-            'visibility': 'on'
-          }
-        ]
-      },
-      {
-        'featureType': 'landscape',
-        'elementType': 'all',
-        'stylers': [
-          {
-            'color': '#f2f2f2'
-          }
-        ]
-      },
-      {
-        'featureType': 'landscape',
-        'elementType': 'geometry.fill',
-        'stylers': [
-          {
-            'color': '#ffffff'
-          }
-        ]
-      },
-      {
-        'featureType': 'landscape.man_made',
-        'elementType': 'geometry.fill',
-        'stylers': [
-          {
-            'color': '#ffffff'
-          }
-        ]
-      },
-      {
-        'featureType': 'poi',
-        'elementType': 'all',
-        'stylers': [
-          {
-            'visibility': 'off'
-          }
-        ]
-      },
-      {
-        'featureType': 'road',
-        'elementType': 'all',
-        'stylers': [
-          {
-            'saturation': -100
-          },
-          {
-            'lightness': 45
-          }
-        ]
-      },
-      {
-        'featureType': 'road',
-        'elementType': 'geometry.fill',
-        'stylers': [
-          {
-            'color': '#eeeeee'
-          }
-        ]
-      },
-      {
-        'featureType': 'road',
-        'elementType': 'labels.text.fill',
-        'stylers': [
-          {
-            'color': '#7b7b7b'
-          }
-        ]
-      },
-      {
-        'featureType': 'road',
-        'elementType': 'labels.text.stroke',
-        'stylers': [
-          {
-            'color': '#ffffff'
-          }
-        ]
-      },
-      {
-        'featureType': 'road.highway',
-        'elementType': 'all',
-        'stylers': [
-          {
-            'visibility': 'simplified'
-          }
-        ]
-      },
-      {
-        'featureType': 'road.arterial',
-        'elementType': 'labels.icon',
-        'stylers': [
-          {
-            'visibility': 'off'
-          }
-        ]
-      },
-      {
-        'featureType': 'transit',
-        'elementType': 'all',
-        'stylers': [
-          {
-            'visibility': 'off'
-          }
-        ]
-      },
-      {
-        'featureType': 'water',
-        'elementType': 'all',
-        'stylers': [
-          {
-            'color': '#46bcec'
-          },
-          {
-            'visibility': 'on'
-          }
-        ]
-      },
-      {
-        'featureType': 'water',
-        'elementType': 'geometry.fill',
-        'stylers': [
-          {
-            'color': '#c8d7d4'
-          }
-        ]
-      },
-      {
-        'featureType': 'water',
-        'elementType': 'labels.text.fill',
-        'stylers': [
-          {
-            'color': '#070707'
-          }
-        ]
-      },
-      {
-        'featureType': 'water',
-        'elementType': 'labels.text.stroke',
-        'stylers': [
-          {
-            'color': '#ffffff'
-          }
-        ]
-      }
-    ]
+    styles: [{"featureType":"water","elementType":"geometry","stylers":[{"color":"#e9e9e9"},{"lightness":17}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"color":"#f5f5f5"},{"lightness":20}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffffff"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#ffffff"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":16}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#f5f5f5"},{"lightness":21}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#dedede"},{"lightness":21}]},{"elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#ffffff"},{"lightness":16}]},{"elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#333333"},{"lightness":40}]},{"elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#f2f2f2"},{"lightness":19}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#fefefe"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#fefefe"},{"lightness":17},{"weight":1.2}]}]
   };
   App.map = new google.maps.Map(canvas, mapOptions);
+};
+
+App.clearMarker = function(){
+  for (var i = 0; i < this.mapMarkers.length; i++) {
+    this.mapMarkers[i].setMap(null);
+  }
 };
 
 $(App.init.bind(App));
