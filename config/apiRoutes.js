@@ -4,7 +4,7 @@ const router   = express.Router();
 const authentications = require('../controllers/authentications');
 const users = require('../controllers/users');
 const webcams = require('../controllers/webcams');
-// const proxy = require('../controllers/proxy');
+const proxies = require('../controllers/proxies');
 
 router.route('/register')
   .post(authentications.register);
@@ -19,7 +19,7 @@ router.route('/users/:id')
   .get(users.show)
   .put(users.update)
   .delete(users.delete);
-// router.route('/weather/:lat/:lng')
-//    .get(proxy.weather);
+router.route('/forecast/:lat/:lng')
+   .get(proxies.forecast);
 
 module.exports = router;

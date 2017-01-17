@@ -208,8 +208,9 @@ App.removeToken = function(){
 App.addInfoWindowForWebcam = function(webcam, marker){
 // Inbuilt defined Google click event
   google.maps.event.addListener(marker, 'click',() => {
-    $('.modal').show();
-    $('.modal-body').html(`
+    this.ajaxRequest(`http://localhost:3000/api/forecast/${webcam.location.latitude}/${webcam.location.longitude}`, 'get', null, App.setApiToken, data => {
+      $('.modal').show();
+      $('.modal-body').html(`
       <ul class='nav nav-tabs'>
           <li class='nav-item active'>
             <a href='#camera' aria-controls='camera' data-toggle='tab'>Camera</a>
@@ -227,17 +228,19 @@ App.addInfoWindowForWebcam = function(webcam, marker){
         <iframe src='${webcam.timelapse.month.embed}?autoplay=1' width='480px' height='340px' allowfullscreen></iframe>
       </div>
       <div role='tabpanel' class='tab-pane' id='details'>
-        <p>Title: ${webcam.title}</p>
-        <p>Country: ${webcam.location.country}</p>
-        <p>City: ${webcam.location.city}</p>
-        <p>Region: ${webcam.location.region}</p>
+        <p><span>Title:</span> ${webcam.title}</p>
+        <p><span>Country:</span> ${webcam.location.country}</p>
+        <p><span>City:</span> ${webcam.location.city}</p>
+        <p><span>Region:</span> ${webcam.location.region}</p>
+        <p><span>Forecast:</span> ${data.summary}</p>
       </div>
         <div role='tabpanel' class='tab-pane' id='weather'>
         <iframe width='96%%' frameBorder='0' style='height: 50vh; margin: 25px 0;' src='https://maps.darksky.net/@temperature,${webcam.location.latitude},${webcam.location.longitude},10?embed=true&timeControl=true&fieldControl=true&defaultField=temperature&defaultUnits=_c'></iframe>
       </div>
     </div>
         `);
-    $('.modal').modal('show');
+      $('.modal').modal('show');
+    });
   });
 };
 
@@ -257,7 +260,7 @@ App.createMarkerForWebcam = function(webcam){
   const marker = new google.maps.Marker({
     position: latlng,
     map: this.map,
-    icon: '/images/icon.jpg',
+    icon: '/images/web-icon.jpg',
     animation: google.maps.Animation.DROP
   });
 
@@ -276,9 +279,9 @@ App.loopThroughWebcams = function(data) {
 
 App.getWebcams = function(){
 
-  // App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/country=FR/category=beach/orderby=popularity/limit=1,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
+  // App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/country=GB/category=beach/orderby=popularity/limit=1,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
 
-  App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/continent=EU/property=hd/orderby=views/limit=2,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
+  App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/continent=EU/property=hd/orderby=views/limit=4,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
 
 
   // for (var i = 0; i < 5; i++) {
@@ -290,8 +293,8 @@ App.mapSetup = function(){
   console.log('building map');
   const canvas = document.getElementById('map-canvas');
   const mapOptions = {
-    zoom: 7,
-    center: new google.maps.LatLng(46.934003, 8.129233),
+    zoom: 9,
+    center: new google.maps.LatLng(46.631204, 8.593613),
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     styles: [
       {
@@ -468,5 +471,3 @@ App.mapSetup = function(){
 };
 
 $(App.init.bind(App));
-
-    // $(App.mapSetup.bind(App));
