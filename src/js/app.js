@@ -42,21 +42,21 @@ App.register = function(e){
   <div class='modal-content'>
   <div class='modal-body'>
   <h2>Register</h2>
-  <form method='post' action='/register'>
-  <div class='form-group'>
-  <input class='form-control-register' type='text' name='user[username]' placeholder='Username'>
-  </div>
-  <div class='form-group'>
-  <input class='form-control-register' type='email' name='user[email]' placeholder='Email'>
-  </div>
-  <div class='form-group'>
-  <input class='form-control-register' type='password' name='user[password]' placeholder='Password'>
-  </div>
-  <div class='form-group'>
-  <input class='form-control-register' type='password' name='user[passwordConfirmation]' placeholder='Password Confirmation'>
-  </div>
-  <input class='btn btn-primary' type='submit' value='Register'>
-  </form>
+    <form method='post' action='/register'>
+    <div class='form-group'>
+    <input class='form-control-register' type='text' name='user[username]' placeholder='Username'>
+    </div>
+    <div class='form-group'>
+    <input class='form-control-register' type='email' name='user[email]' placeholder='Email'>
+    </div>
+    <div class='form-group'>
+    <input class='form-control-register' type='password' name='user[password]' placeholder='Password'>
+    </div>
+    <div class='form-group'>
+    <input class='form-control-register' type='password' name='user[passwordConfirmation]' placeholder='Password Confirmation'>
+    </div>
+    <input class='btn btn-primary' type='submit' value='Register'>
+    </form>
   </div>
   </div>
   </div>
@@ -64,60 +64,6 @@ App.register = function(e){
   `);
   $('.modal').modal('show');
 };
-
-// App.register = function(e){
-//   if (e) e.preventDefault();
-//   this.$main.html(`
-//     <h2>Register</h2>
-//     <form method='post' action='/register'>
-//     <div class='form-group'>
-//     <input class='form-control' type='text' name='user[username]' placeholder='Username'>
-//     </div>
-//     <div class='form-group'>
-//     <input class='form-control' type='email' name='user[email]' placeholder='Email'>
-//     </div>
-//     <div class='form-group'>
-//     <input class='form-control' type='password' name='user[password]' placeholder='Password'>
-//     </div>
-//     <div class='form-group'>
-//     <input class='form-control' type='password' name='user[passwordConfirmation]' placeholder='Password Confirmation'>
-//     </div>
-//     <input class='btn btn-primary' type='submit' value='Register'>
-//     </form>
-//   `);
-// };
-
-// App.login = function(e){
-//   if (e) e.preventDefault();
-//   this.$main.html(`<div class='modal fade' id='exampleModal' tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true'>
-//   <div class='modal-dialog' role='document'>
-//     <div class='modal-content'>
-//     <div class='modal-header'>
-//       <h5 class='modal-title' id='exampleModalLabel'>Login</h5>
-//       <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-//   </div>
-//   <div class='modal-body'>
-//     <form action='/login' method='POST'>
-//     <div class='form-group'>
-//     <label for='recipient-name' class='form-control-label'>Email:</label>
-//     <input type='text' name='user[email]' class='form-control' id='email'>
-//   </div>
-//   <div class='form-group'>
-//     <label for='recipient-name' class='form-control-label'>Password:</label>
-//     <input type='password' name='user[password]' class='form-control' id='password'>
-//   </div>
-//     <div class='modal-footer'>
-//     <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
-//   <button type='submit' class='btn btn-primary registerUser value='login'>Log In</button>
-//   </div>
-//   </form>
-//   </div>
-//   </div>
-//   </div>
-//   </div>
-//   `);
-//   $('.modal').modal('show');
-// };
 
 App.login = function(e) {
   if(e) e.preventDefault();
@@ -173,14 +119,14 @@ App.ajaxRequest = function(url, method, data, callback, apiToken){
     data,
     beforeSend: apiToken ? apiToken : this.setRequestHeader.bind(this)
   })
-    .done(callback)
-    .fail(data => {
-      console.log(data);
-    });
+  .done(callback)
+  .fail(data => {
+    console.log(data);
+  });
 };
 
 App.setRequestHeader = function(xhr) {
-  return xhr.setRequestHeader('Authorization', `Bearer       ${this.getToken()}`);
+  return xhr.setRequestHeader('Authorization', `Bearer ${this.getToken()}`);
 };
 
 App.setApiToken = function(xhr) {
@@ -208,9 +154,11 @@ App.removeToken = function(){
 App.addInfoWindowForWebcam = function(webcam, marker){
 // Inbuilt defined Google click event
   google.maps.event.addListener(marker, 'click',() => {
-    this.ajaxRequest(`http://localhost:3000/api/forecast/${webcam.location.latitude}/${webcam.location.longitude}`, 'get', null, App.setApiToken, data => {
-      $('.modal').show();
-      $('.modal-body').html(`
+    this.ajaxRequest(`http://localhost:3000/api/forecast/${webcam.location.latitude}/${webcam.location.longitude}`, 'get', null, data => {
+      this.$main.html(`<div class='modal fade' tabindex='-1' role='dialog'>
+      <div class='modal-dialog' role='document'>
+      <div class='modal-content'>
+      <div class='modal-body'>
       <ul class='nav nav-tabs'>
           <li class='nav-item active'>
             <a href='#camera' aria-controls='camera' data-toggle='tab'>Camera</a>
@@ -228,20 +176,24 @@ App.addInfoWindowForWebcam = function(webcam, marker){
         <iframe src='${webcam.timelapse.month.embed}?autoplay=1' width='480px' height='340px' allowfullscreen></iframe>
       </div>
       <div role='tabpanel' class='tab-pane' id='details'>
-        <p><span>Title:</span> ${webcam.title}</p>
-        <p><span>Country:</span> ${webcam.location.country}</p>
-        <p><span>City:</span> ${webcam.location.city}</p>
-        <p><span>Region:</span> ${webcam.location.region}</p>
-        <p><span>Forecast:</span> ${data.summary}</p>
+        <p><strong>Title:</strong> ${webcam.title}</p>
+        <p><strong>Country:</strong> ${webcam.location.country}</p>
+        <p><strong>City:</strong> ${webcam.location.city}</p>
+        <p><strong>Region:</strong> ${webcam.location.region}</p>
+        <p><strong>Forecast:</strong> ${data.summary}</p>
       </div>
         <div role='tabpanel' class='tab-pane' id='weather'>
         <iframe width='96%%' frameBorder='0' style='height: 50vh; margin: 25px 0;' src='https://maps.darksky.net/@temperature,${webcam.location.latitude},${webcam.location.longitude},10?embed=true&timeControl=true&fieldControl=true&defaultField=temperature&defaultUnits=_c'></iframe>
       </div>
     </div>
+    </div>
+    </div>
+    </div>
+    </div>
         `);
       $('.modal').modal('show');
     });
-  });
+  }, null);
 };
 
 App.toggleBounce = function(marker) {

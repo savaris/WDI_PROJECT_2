@@ -1,11 +1,17 @@
-body {
-  background: white;
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding:0;
 }
 
 #map-canvas {
-  height: 92vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   margin: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
 }
 
 img.logo {
@@ -14,17 +20,26 @@ img.logo {
 }
 
 nav.navbar.navbar-light.bg-faded {
-  // margin-left: -140px;
-  background-color: white;
-  border-radius: 0px;
-
+  width: 186px;
+  position: fixed;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  margin-left: 10px;
+  margin-left: 548px;
+  margin-top: 12px;
+  }
   a.navbar-brand {
-    color: black;
+    font-family: 'Shrikhand', cursive;
+    font-family: 'Righteous', cursive;
     margin-left: -74px;
   }
-
   a.nav-link {
-    color: black;
+    font-family: 'Shrikhand', cursive;
+    font-family: 'Righteous', cursive;
+    color: #000000;
+    margin-left: -8px;
+   }
   }
 }
 
@@ -38,8 +53,12 @@ nav.navbar.navbar-light.bg-faded {
    border-radius: 4px;
    h2{
      color: #999999;
+     font-family: 'Shrikhand', cursive;
+     font-family: 'Righteous', cursive;
    }
-     input.form-control-register{
+      .form-control-register{
+       font-family: 'Shrikhand', cursive;
+       font-family: 'Righteous', cursive;
        width: 580px;
        height: 40px;
        margin: auto;
@@ -48,6 +67,8 @@ nav.navbar.navbar-light.bg-faded {
        text-align: center;
    }
        .form-control-login{
+         font-family: 'Shrikhand', cursive;
+         font-family: 'Righteous', cursive;
          width: 580px;
          height: 40px;
          margin: auto;
@@ -62,6 +83,8 @@ nav.navbar.navbar-light.bg-faded {
        width: 98%;
      }
      p{
+       font-family: 'Shrikhand', cursive;
+       font-family: 'Righteous', cursive;
        color: #999999;
      }
 }
@@ -71,6 +94,8 @@ nav.navbar.navbar-light.bg-faded {
 }
 
 ul.nav.nav-tabs {
+  font-family: 'Shrikhand', cursive;
+  font-family: 'Righteous', cursive;
   margin-top: 6px;
   margin-bottom: 5px;
   margin-right: 4px;
@@ -78,18 +103,16 @@ ul.nav.nav-tabs {
   border-radius: 4px;
   display: inline-flex;
   height: 36px;
-  width: 300px;
+  width: 324px;
   border: 2px solid #999999;
   text-decoration: none;
     a{
+      font-family: 'Shrikhand', cursive;
+      font-family: 'Righteous', cursive;
       margin-left: 20px;
       color: #999999;
       font-size: 22px;
     }
-}
-
-span{
-  font-style: bold;
 }
 
 input.btn.btn-primary {
