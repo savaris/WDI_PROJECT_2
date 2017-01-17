@@ -16,6 +16,10 @@ App.init = function() {
   } else {
     this.loggedOutState();
   }
+  $('body').on('hidden.bs.modal', function(){
+    console.log('running');
+    App.map.setZoom(7);
+  });
 };
 
 App.loggedInState = function(){
@@ -182,6 +186,7 @@ App.addInfoWindowForWebcam = function(webcam, marker){
     </div>
         `);
       $('.modal').modal('show');
+      // this.map.setZoom(7);
     });
   }, null);
 };
@@ -194,6 +199,7 @@ App.toggleBounce = function(marker) {
     });
 
     marker.setAnimation(google.maps.Animation.BOUNCE);
+    this.map.setZoom(12);
   });
 };
 
