@@ -17,7 +17,7 @@ App.init = function() {
     this.loggedOutState();
   }
   $('body').on('hidden.bs.modal', function(){
-    App.map.setZoom(7);
+    App.map.setZoom(6);
   });
 };
 
@@ -225,11 +225,11 @@ App.loopThroughWebcams = function(data) {
 };
 
 App.getWebcams = function(){
-  App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/continent=EU/property=hd/orderby=views/limit=24,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
+  App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/continent=EU/property=hd/orderby=views/limit=25,?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
 };
 
 App.getNearcams = function(object){
-  App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/limit=24/nearby=${object.lat},${object.lng},50?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
+  App.ajaxRequest(`https://webcamstravel.p.mashape.com/webcams/list/limit=25/nearby=${object.lat},${object.lng},50?show=webcams:location,url,timelapse`, 'GET', null, this.loopThroughWebcams, App.setApiToken);
 };
 
 App.mapSetup = function(){
