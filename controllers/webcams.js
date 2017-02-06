@@ -1,4 +1,4 @@
-const Webcam = require('../models/blah');
+const Webcam = require('../models/webcam');
 
 function webcamsIndex(req, res){
   Webcam.find((err, webcams) => {
