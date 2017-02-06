@@ -3,7 +3,7 @@ const google = google;
 
 App.init = function() {
   App.mapSetup();
-  this.apiUrl = 'http://localhost:3000/api';
+  this.apiUrl = `${window.location.origin}/api`;
   this.$main  = $('main');
   this.mapMarkers = [];
 
@@ -147,7 +147,7 @@ App.removeToken = function(){
 
 App.addInfoWindowForWebcam = function(webcam, marker){
   google.maps.event.addListener(marker, 'click',() => {
-    this.ajaxRequest(`http://localhost:3000/api/forecast/${webcam.location.latitude}/${webcam.location.longitude}`, 'get', null, data => {
+    this.ajaxRequest(`${window.location.origin}/api/forecast/${webcam.location.latitude}/${webcam.location.longitude}`, 'get', null, data => {
       this.$main.html(`<div class='modal fade' tabindex='-1' role='dialog'>
       <div class='modal-dialog' role='document'>
       <div class='modal-content'>
