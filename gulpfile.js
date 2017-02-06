@@ -59,4 +59,4 @@ gulp.task('default', ['sass', 'es6', 'images', 'fonts', 'serve'], () => {
   gulp.watch('**/*.html', browserSync.reload);
 });
 
-gulp.task('default', ['sass', 'es6', 'images', 'fonts']);
+gulp.task('deploy', ['sass', 'es6', 'images', 'fonts']);
