@@ -2,9 +2,9 @@ const express  = require('express');
 const router   = express.Router();
 
 const authentications = require('../controllers/authentications');
-const users = require('../controllers/users');
-const webcams = require('../controllers/webcams');
-const proxies = require('../controllers/proxies');
+const users           = require('../controllers/users');
+const webcams         = require('../controllers/webcams');
+const proxies         = require('../controllers/proxies');
 
 router.route('/register')
   .post(authentications.register);
