@@ -118,7 +118,7 @@ With all these functions incorporated I styled my app using Page.js so that a lo
 
 <img width="1280" alt="screen shot 2017-03-13 at 00 24 40" src="https://cloud.githubusercontent.com/assets/23128874/23837690/f4c0c5ca-0783-11e7-9df3-acbcaf18f0fd.png">
 
----I
+---
 
 A fully working version of the app can be found here:  https://web-cam-travel.herokuapp.com/
 
